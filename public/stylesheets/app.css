@@ -4,5 +4,9 @@
 }
 
 body {
-  background: peachpuff;
+  margin-top: 6rem;
+}
+
+.center {
+  text-align: center;
 }
