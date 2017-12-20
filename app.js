@@ -26,7 +26,7 @@ var Blog = mongoose.model("Blog", blogSchema);
 Blog.create(
   {
     title: "Why Prices for Gadgets Are Diving in the Age of Amazon",
-    image: "https://cdn-images-1.medium.com/max/1000/1*NIehoFi4kDSLtLhmTZe-uA.jpeg",
+    image: "https://media.licdn.com/media-proxy/ext?w=800&h=800&hash=WRuGzxIg3MAYQ0On6ZLqRVrPhro%3D&ora=1%2CaFBCTXdkRmpGL2lvQUFBPQ%2CxAVta5g-0R6nlh8Tw1Ek-L7T40O550NJC4HTDy_8DnHzq8jAIiihMNiKMfau41ASfCwXyAkwduy-Fj2_BMvtaNLiPr0y19GnMZKWYkJUTzIB1VxExfMjKwAUrKfjV8n8TzZNl798KyCvMuS4IgAcCwMV3tixKYzqJE029QSAW-nUP-51b_Iw05l79UpU8sqIRPhonYRyx0dw0Aek77zZBiwq_dj-W0eVJFkjOESSPqxhmr6Inya7uFaMmFvotImpP7yHGPEj-F6E0Lr7fBCy2VFBqFo9_T5Uo9pBB0frmfk8x2ajZNgmByeJ4cDnRE2K-pRH7DUk7eKRNyGxXGdEwxdt",
     body: "A few weeks ago, Wyze Labs, a 1-year-old startup in Seattle, sent me its first gadget to try. It’s a small, internet-connected video camera, the kind you might use for security or to keep tabs on your dog or your baby. On the surface, the camera doesn’t sound special. Like home internet cameras made by Nest or Netgear, the Wyze device can monitor an area for motion or sound. When it spots something, it begins recording a short clip that it stores online, for access on your phone or your computer. But the WyzeCam has one groundbreaking feature that no rival can match. It is being sold for such an unbelievably low price — $20 — that it sent me tunneling into the global gadget industry to figure out how Wyze had done it. That, in turn, led to a revelation about the future of all kinds of products, from cameras to clothes."
   },
   function(err, newBlog) {
@@ -54,6 +54,25 @@ app.get("/blogs", function(req, res) {
     }
     else {
       res.render("index", {blogs: blogs});
+    }
+  });
+});
+
+// NEW - Display a form to create new post
+app.get("/blogs/new", function(req, res) {
+  res.render("new");
+});
+
+// CREATE - Create a new post in the db
+app.post("/blogs", function(req, res) {
+  Blog.create(req.body.blog, function(err, newBlog) {
+    if (err) {
+      res.render("/blogs/new");
+      console.log("ERROR:");
+      console.log(err);
+    }
+    else {
+      res.redirect("/blogs");
     }
   });
 });
