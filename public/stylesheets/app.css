@@ -7,6 +7,13 @@ body {
   margin-top: 6rem;
 }
 
-.center {
-  text-align: center;
+/* for the delete btn in the show page */
+.delete-form {
+  display: inline;
+}
+
+p {
+  font-family: 'Open Sans', Arial, Verdana, Sans-Serif;
+  font-size: 17px;
+  line-height: 32px;
 }

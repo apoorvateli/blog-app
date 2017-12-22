@@ -122,6 +122,18 @@ app.put("/blogs/:id", function(req, res) {
   });
 });
 
+// DELETE - Delete/Remove a specific dog from the DB
+app.delete("/blogs/:id", function(req, res) {
+  Blog.findByIdAndRemove(req.params.id, function(err, deletedBlog) {
+    if (err) {
+      res.redirect("/blogs");
+    }
+    else {
+      res.redirect("/blogs");
+    }
+  });
+});
+
 app.listen(3000, function() {
   console.log("Serving blog_app on port 3000");
-})
+});
