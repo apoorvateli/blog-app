@@ -1,11 +1,13 @@
 var express = require("express"),
 app = express(),
+mongoose = require("mongoose"),
 bodyParser = require("body-parser"),
-mongoose = require("mongoose");
+methodOverride = require("method-override");
 
 // APP CONFIG
 mongoose.connect("mongodb://localhost/blog_app", {useMongoClient: true});
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
@@ -50,6 +52,7 @@ app.get("/", function(req, res) {
 app.get("/blogs", function(req, res) {
   var blog = Blog.find({}, function(err, blogs) {
     if (err) {
+      console.log("ERROR IN INDEX ROUTE:");
       console.log(err);
     }
     else {
@@ -65,11 +68,12 @@ app.get("/blogs/new", function(req, res) {
 
 // CREATE - Create a new post in the db
 app.post("/blogs", function(req, res) {
+  // Blog.create( dataFromForm, callback )
   Blog.create(req.body.blog, function(err, newBlog) {
     if (err) {
       res.render("/blogs/new");
-      console.log("ERROR:");
-      console.log(err);
+      // console.log("ERROR:");
+      // console.log(err);
     }
     else {
       res.redirect("/blogs");
@@ -77,16 +81,43 @@ app.post("/blogs", function(req, res) {
   });
 });
 
-// SHOW - Show info about one specific blogs
+// SHOW - Show info about one specific blog
 app.get("/blogs/:id", function(req, res) {
   Blog.findById(req.params.id, function(err, foundBlog) {
     if (err) {
       res.redirect("/blogs");
-      console.log("ERROR:");
-      console.log(err);
+      // console.log("ERROR:");
+      // console.log(err);
     }
     else {
       res.render("show", {blog: foundBlog});
+    }
+  });
+});
+
+// EDIT - Display a form to edit a specific blog
+app.get("/blogs/:id/edit", function(req, res) {
+  Blog.findById(req.params.id, function(err, foundBlog) {
+    if (err) {
+      res.redirect("/blogs");
+    }
+    else {
+      res.render("edit", {blog: foundBlog});
+    }
+  });
+});
+
+// UPDATE - Update a specific blog in the DB
+app.put("/blogs/:id", function(req, res) {
+  // Blog.findByIdAndUpdate( id , newDataFromForm, callback )
+  Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog) {
+    if (err) {
+      // redirect to the EDIT page
+      res.redirect("/blogs/" + req.params.id + "/edit");
+    }
+    else {
+      // redirect to the SHOW page
+      res.redirect("/blogs/" + req.params.id);
     }
   });
 });
