@@ -3,13 +3,45 @@
   <h1>Blogs</h1>
 </div>
 
+<!--
 <% blogs.forEach( function(value, index) { %>
   <div class="ui container segment">
     <h3><%= value.title %></h3>
     <h5><%= value.created %></h5>
     <img src="<%= value.image %>" alt="blog image">
-    <p><%= value.body %></p>
+    <p><%= value.body.substring(0, 100) %>...</p>
+    <a href="/blogs/<%= value._id %>">Read More</a>
   </div>
 <% } ); %>
+-->
+
+<div class="ui container segment">
+
+  <div class="ui divided items">
+    <% blogs.forEach( function(value, index) { %>
+      <div class="item">
+        <div class="image">
+          <img src="<%= value.image %>" alt="blog image">
+        </div>
+        <div class="content">
+          <a class="header" href="/blogs/<%= value._id %>"><%= value.title %></a>
+          <div class="meta">
+            <span><i class="write icon"></i> <%= value.created.toDateString() %></span>
+          </div>
+          <div class="description">
+            <p><%= value.body.substring(0, 250) %>...</p>
+          </div>
+          <div class="extra">
+            <a href="/blogs/<%= value._id %>" class="ui right floated primary button">
+              Read more
+              <i class="right chevron icon"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <% } ); %>
+  </div>
+
+</div>
 
 <% include partials/footer %>
