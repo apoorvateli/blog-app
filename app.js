@@ -2,11 +2,13 @@ var express = require("express"),
 app = express(),
 mongoose = require("mongoose"),
 bodyParser = require("body-parser"),
-methodOverride = require("method-override");
+methodOverride = require("method-override"),
+expressSanitizer = require("express-sanitizer");
 
 // APP CONFIG
 mongoose.connect("mongodb://localhost/blog_app", {useMongoClient: true});
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressSanitizer()); // this code should be after using bodyParser
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -68,6 +70,12 @@ app.get("/blogs/new", function(req, res) {
 
 // CREATE - Create a new post in the db
 app.post("/blogs", function(req, res) {
+  // sanitize the data coming from new blog form - MIDDLEWARE
+  req.body.blog.title = req.sanitize(req.body.blog.title);
+  req.body.blog.image = req.sanitize(req.body.blog.image);
+  req.body.blog.body = req.sanitize(req.body.blog.body);
+
+  // create blog
   // Blog.create( dataFromForm, callback )
   Blog.create(req.body.blog, function(err, newBlog) {
     if (err) {
@@ -76,6 +84,7 @@ app.post("/blogs", function(req, res) {
       // console.log(err);
     }
     else {
+      // redirect to the index page
       res.redirect("/blogs");
     }
   });
@@ -109,6 +118,11 @@ app.get("/blogs/:id/edit", function(req, res) {
 
 // UPDATE - Update a specific blog in the DB
 app.put("/blogs/:id", function(req, res) {
+  // sanitize the data coming from edit blog form - MIDDLEWARE
+  req.body.blog.title = req.sanitize(req.body.blog.title);
+  req.body.blog.image = req.sanitize(req.body.blog.image);
+  req.body.blog.body = req.sanitize(req.body.blog.body);
+
   // Blog.findByIdAndUpdate( id , newDataFromForm, callback )
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog) {
     if (err) {
