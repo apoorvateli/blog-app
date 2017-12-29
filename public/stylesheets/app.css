@@ -7,6 +7,10 @@ body {
   margin-top: 6rem;
 }
 
+.show-container {
+  margin-bottom: 6rem;
+}
+
 /* for the delete btn in the show page */
 .delete-form {
   display: inline;
@@ -16,4 +20,8 @@ p {
   font-family: 'Open Sans', Arial, Verdana, Sans-Serif;
   font-size: 17px;
   line-height: 32px;
+}
+
+.show-img {
+  margin: 20px auto;
 }

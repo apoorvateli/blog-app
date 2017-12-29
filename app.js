@@ -52,7 +52,7 @@ app.get("/", function(req, res) {
 
 // INDEX - Display a list of all blogs
 app.get("/blogs", function(req, res) {
-  var blog = Blog.find({}, function(err, blogs) {
+  Blog.find({}, function(err, blogs) {
     if (err) {
       console.log("ERROR IN INDEX ROUTE:");
       console.log(err);
