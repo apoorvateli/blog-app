@@ -79,12 +79,12 @@ app.post("/blogs", function(req, res) {
   // Blog.create( dataFromForm, callback )
   Blog.create(req.body.blog, function(err, newBlog) {
     if (err) {
-      res.render("/blogs/new");
+      res.render("new");
       // console.log("ERROR:");
       // console.log(err);
     }
     else {
-      // redirect to the index page
+      // redirect to the index route
       res.redirect("/blogs");
     }
   });
@@ -126,11 +126,11 @@ app.put("/blogs/:id", function(req, res) {
   // Blog.findByIdAndUpdate( id , newDataFromForm, callback )
   Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog) {
     if (err) {
-      // redirect to the EDIT page
+      // redirect to the EDIT route
       res.redirect("/blogs/" + req.params.id + "/edit");
     }
     else {
-      // redirect to the SHOW page
+      // redirect to the SHOW route
       res.redirect("/blogs/" + req.params.id);
     }
   });
@@ -140,9 +140,10 @@ app.put("/blogs/:id", function(req, res) {
 app.delete("/blogs/:id", function(req, res) {
   Blog.findByIdAndRemove(req.params.id, function(err, deletedBlog) {
     if (err) {
-      res.redirect("/blogs");
-    }
+      // redirect to the SHOW route
+      res.redirect("/blogs/"+req.params.id);    }
     else {
+      // redirect to the INDEX route
       res.redirect("/blogs");
     }
   });
